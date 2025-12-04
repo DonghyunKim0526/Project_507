@@ -5,6 +5,8 @@
 ## Report
 - 📄 [Crisis Severity Detection Project Report (PDF)](Project_507_Donghyun_Kim.pdf)
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1cQWFjaLWntIPXX8NFldaC_QoJUjHR4VA)
+
 ---
 ## 📘 Overview
 This project implements a complete pipeline for crisis severity detection using the CrisisMMD humanitarian dataset.  
