@@ -2,6 +2,9 @@
 # Crisis Severity Detection with TF–IDF Logistic Regression and DistilBERT: 
 *A Cost-Sensitive Approach with Lightweight Defense-Oriented Adaptation
 
+## Report
+- 📄 [Crisis Severity Detection Project Report (PDF)](Project_507_Donghyun_Kim.pdf)
+
 ## Open in Colab
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
 https://colab.research.google.com/github/DonghyunKim0526/Project_507/blob/main/Final_Project_Donghyun_Kim.ipynb)
