@@ -7,6 +7,17 @@
 https://colab.research.google.com/github/DonghyunKim0526/Project_507/blob/main/Final_Project_Donghyun_Kim.ipynb)
 
 ---
+## 📘 Overview
+This project implements a complete pipeline for crisis severity detection using the CrisisMMD humanitarian dataset.  
+The workflow includes:
+
+- Construction of a **4-level operational severity scale**
+- A **TF–IDF + Logistic Regression** baseline model
+- **DistilBERT** fine-tuning for contextual classification
+- Lightweight **lexicon-guided domain adaptation**
+- A custom **cost-sensitive evaluation framework** to capture asymmetric operational risks
+
+The goal is to examine how classical and Transformer-based models differ in handling crisis-related text, and whether simple domain adaptation can improve performance in defense-relevant contexts.
 
 ## 📊 Dataset
 **CrisisMMD (Humanitarian subset)**  
