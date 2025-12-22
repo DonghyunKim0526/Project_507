@@ -20,9 +20,6 @@ Key components:
 - **Scripts:** `scripts/` (training/evaluation utilities)
 - **Figures:** `Figure/`
 
-> Tip: If you want reviewers to run it quickly, keep the notebook as the “single source of truth”
-and treat scripts as supporting modules.
-
 ---
 
 ## Problem Statement
