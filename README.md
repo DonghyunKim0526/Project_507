@@ -107,12 +107,13 @@ for rare high-severity cases.
 
 ### Confusion Matrix Comparison (Test Set)
 
-| TF–IDF + Logistic Regression | DistilBERT | Domain-Adapted DistilBERT |
-|---|---|---|
-| ![](Figure/confusion_matrix_logistic_baseline.jpg) | ![](Figure/confusion_matrix_distilbert_baseline.jpg) | ![](Figure/confusion_matrix_domain_adapt.jpg) |
+| DistilBERT (Baseline) | Domain-Adapted DistilBERT |
+|---|---|
+| ![](Figure/confusion_matrix_distilbert_baseline.jpg) | ![](Figure/confusion_matrix_domain_adapt.jpg) |
 
-Confusion matrices highlight systematic confusion between adjacent severity levels,
-motivating the use of cost-sensitive evaluation beyond accuracy.
+Confusion matrices reveal systematic confusion between adjacent severity levels, particularly between Routine–Elevated and Elevated–Urgent classes.
+While domain-guided oversampling alters prediction behavior, it does not consistently reduce high-risk misclassifications involving Urgent or Critical cases.
+
 ---
 
 ## Conclusion
