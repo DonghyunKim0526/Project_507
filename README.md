@@ -1,155 +1,140 @@
-# Project_507
-# Crisis Severity Detection with TF–IDF Logistic Regression and DistilBERT: 
-*A Cost-Sensitive Approach with Lightweight Defense-Oriented Adaptation
+# Crisis Severity Detection with TF–IDF Logistic Regression and DistilBERT
+*A cost-sensitive approach with an operational 4-level severity scale and lightweight lexicon-guided adaptation*
 
-## Report
-- 📄 [Crisis Severity Detection Project Report (PDF)](Project_507_Donghyun_Kim.pdf)
+## Overview
+This project builds an end-to-end pipeline for **crisis severity detection** from short, noisy social-media text
+using the **CrisisMMD (Humanitarian subset)**.  
+It emphasizes **operational decision-making** by (1) constructing a **4-level severity target** from original humanitarian labels,
+and (2) evaluating models with a **custom cost-sensitive risk matrix** that penalizes dangerous underestimation of urgent/critical cases.
 
-## Colab Notebook (code script)
+Key components:
+- **4-level operational severity scale** (new target variable)
+- **TF–IDF + Logistic Regression** baseline
+- **DistilBERT fine-tuning** baseline
+- **Lexicon-guided oversampling** for lightweight domain adaptation
+- **Cost-sensitive evaluation** (risk matrix)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
-https://colab.research.google.com/github/DonghyunKim0526/Project_507/blob/main/Final_Project_Donghyun%20Kim.ipynb
-)
+## Report & Code
+- **Final report (PDF):** `Project_507_Donghyun Kim.pdf`
+- **Notebook:** `Final_Project_Donghyun Kim.ipynb`
+- **Scripts:** `scripts/` (training/evaluation utilities)
+- **Figures:** `Figure/`
 
----
-## 📘 Overview
-This project implements a complete pipeline for crisis severity detection using the CrisisMMD humanitarian dataset.  
-The workflow includes:
-
-- Construction of a **4-level operational severity scale**
-- A **TF–IDF + Logistic Regression** baseline model
-- **DistilBERT** fine-tuning for contextual classification
-- Lightweight **lexicon-guided domain adaptation**
-- A custom **cost-sensitive evaluation framework** to capture asymmetric operational risks
-
-The goal is to examine how classical and Transformer-based models differ in handling crisis-related text, and whether simple domain adaptation can improve performance in defense-relevant contexts.
-
-## 📊 Dataset
-**CrisisMMD (Humanitarian subset)**  
-- Source: Public dataset released by Alam et al. (ICWSM 2018)  
-- Contains short, noisy Twitter messages from real disaster events  
-- Eight original humanitarian labels → mapped to four severity levels:
-  - **Routine**  
-  - **Elevated**  
-  - **Urgent**  
-  - **Critical**
-
-The mapping is inspired by:
-- U.S. Army medical evacuation precedence (ATP 4-02.2)  
-- Emergency Severity Index (ESI) clinical triage system  
+> Tip: If you want reviewers to run it quickly, keep the notebook as the “single source of truth”
+and treat scripts as supporting modules.
 
 ---
 
-## 🧭 Method Summary
+## Problem Statement
+Given a crisis-related tweet/message, predict the **severity level** of the situation to support triage-like prioritization:
+**Routine → Elevated → Urgent → Critical**.
 
-### **1. Exploratory Data Analysis**
-- Heavy class imbalance  
-- High lexical noise  
-- Short tweets (~15 words on average)  
-- Rare but operationally important classes (e.g., Critical)
+The key question is not only “Which model is more accurate?” but:
+> **How do models behave under asymmetric operational risk** (e.g., predicting Routine when the truth is Critical)?
 
-### **2. Severity Mapping**
-Eight original CrisisMMD humanitarian categories are grouped into four levels:
+---
 
-| Severity | Original Labels |
-|---------|-----------------|
-| Routine | not_humanitarian, other_relevant_information |
-| Elevated | infrastructure_and_utility_damage, vehicle_damage, rescue_volunteering_or_donation_effort |
-| Urgent | affected_individuals |
-| Critical | injured_or_dead_people, missing_or_found_people |
+## Dataset
+- **Dataset:** CrisisMMD (Humanitarian subset)
+- **Source:** Public dataset released by Alam et al. (ICWSM 2018)
+- **Data characteristics:** short/noisy text, class imbalance, rare but high-stakes classes
 
-This produces an ordered, decision-oriented target variable.
+---
 
-### **3. TF–IDF + Logistic Regression**
-- Unigrams + bigrams  
-- Vocabulary capped at 10,000  
-- lbfgs optimizer  
-- Class weights = inverse-frequency  
+## Severity Scale Construction (Core Contribution)
+CrisisMMD provides **eight humanitarian labels**. This project constructs a **4-level ordered severity scale**
+designed for operational use:
 
-Serves as a classical, non-contextual baseline.
+### Severity mapping (8 labels → 4 levels)
+| Severity level | Original labels grouped |
+|---|---|
+| **Routine** | `not_humanitarian`, `other_relevant_information` |
+| **Elevated** | `infrastructure_and_utility_damage`, `vehicle_damage`, `rescue_volunteering_or_donation_effort` |
+| **Urgent** | `affected_individuals` |
+| **Critical** | `injured_or_dead_people`, `missing_or_found_people` |
 
-### **4. DistilBERT Baseline**
-- Max sequence length = 64  
-- Weight decay 0.01  
-- Batch size 16/32  
-- 3 epochs  
-Fine-tuned as a four-class classifier.
+**Rationale:** the mapping is inspired by operational/triage framing (e.g., medical evacuation precedence and clinical triage systems),
+to create a decision-oriented target variable rather than a purely descriptive taxonomy.
 
-### **5. Domain-Adapted DistilBERT**
-- Custom defense logistics lexicon from:
-  - NATO AJP-4  
-  - JP 4-0  
-  - AJP-4.4  
-  - Humanitarian logistics literature
-- Tweets containing lexicon terms oversampled  
-- No model architecture changes  
-- Goal: expose DistilBERT to defense-related contexts
+---
 
-### **6. Cost-Sensitive Evaluation**
-A 4×4 custom risk matrix penalizes:
-- Underestimating **Urgent/Critical** most severely  
+## Methods
+
+### 1) Baseline: TF–IDF + Logistic Regression
+- Features: unigram + bigram TF–IDF
+- Vocabulary cap: 10,000
+- Optimizer: `lbfgs`
+- Class weighting: inverse-frequency (to mitigate imbalance)
+
+Purpose: strong classical baseline without contextual modeling.
+
+### 2) Transformer: DistilBERT Fine-Tuning
+- Max sequence length: 64
+- Weight decay: 0.01
+- Batch size: 16/32
+- Epochs: 3
+
+Purpose: contextual classification for short/noisy text.
+
+### 3) Lightweight Domain Adaptation (Lexicon-Guided Oversampling)
+A defense/logistics-oriented lexicon was compiled from sources such as:
+- NATO AJP-4 / AJP-4.4, JP 4-0
+- Humanitarian logistics literature
+
+Tweets containing lexicon terms were oversampled to expose the model to domain-relevant cues
+**without changing model architecture**.
+
+### 4) Cost-Sensitive Evaluation (Risk Matrix)
+A custom **4×4 risk matrix** penalizes:
+- Underestimating **Urgent/Critical** most severely
 - Severe false alarms
-- Large severity distance  
+- Larger severity distance more than small deviations
 
-Outputs:
-- Total risk  
-- Average risk  
+Outputs include **total risk** and **average risk** (lower is better).
 
 ---
 
-## 🧪 Key Results
+## Key Results
 
-### **Baseline Comparison**
+### Baseline comparison
 | Model | Accuracy | Macro-F1 | Avg Risk |
-|-------|----------|----------|----------|
-| Logistic Regression | 0.646 | 0.472 | 0.585 |
+|---|---:|---:|---:|
+| Logistic Regression (TF–IDF) | 0.646 | 0.472 | 0.585 |
 | DistilBERT | 0.703 | 0.522 | 0.421 |
 
-➡ DistilBERT clearly outperforms TF–IDF baseline.
+**DistilBERT outperforms** the TF–IDF baseline across standard metrics and cost-sensitive risk.
 
-### **Domain Adaptation Effect**
+### Domain adaptation effect
 | Model | Accuracy | Macro-F1 | Avg Risk |
-|-------|----------|----------|----------|
+|---|---:|---:|---:|
 | DistilBERT | 0.703 | 0.522 | 0.421 |
-| Domain-Adapted DistilBERT | 0.685 | 0.476 | 0.461 |
+| Domain-adapted DistilBERT (oversampling) | 0.685 | 0.476 | 0.461 |
 
-➡ Oversampling using the defense lexicon shifts model behavior  
-➡ …but **does NOT improve performance**
-
-Key observations:
-- More Routine → Elevated misclassifications  
-- Critical recall drops (0.67 → 0.41)  
-- Model becomes more sensitive to logistics-related cues  
-- But this hurts generalization on the CrisisMMD test distribution
+Lexicon-guided oversampling **shifts model behavior** but **does not improve overall performance** on the test distribution.
+Notable behavior changes observed in the analysis include increased sensitivity to logistics-related cues and reduced performance
+for rare high-severity cases.
 
 ---
 
-## 🏁 Conclusion
-- DistilBERT improves crisis-severity classification over TF–IDF.  
-- Both models struggle with rare high-severity cases (Urgent/Critical).  
-- Simple lexicon-weighted oversampling is **not** enough for domain specialization.  
-- More robust adaptation (sample weighting, continual pretraining) is needed.  
-- Public crisis datasets are effective proxies for developing triage-style classifiers.
+## Conclusion
+- DistilBERT improves crisis severity classification relative to TF–IDF Logistic Regression.
+- Both approaches remain challenged by **rare high-severity cases (Urgent/Critical)**.
+- Simple lexicon-weighted oversampling alone is insufficient for reliable domain specialization.
+  More robust adaptation strategies (e.g., sample weighting, continual pretraining) are promising next steps.
+- Public crisis datasets can still serve as useful proxies for developing triage-style classifiers,
+  provided evaluation reflects operational risk.
 
 ---
 
-## 🔗 References  
-(References already included in the notebook and final report.)
-
-
-- Gilboy et al., *Emergency Severity Index (ESI)*  
-- U.S. Army, ATP 4-02.2: *Medical Evacuation*  
-- NATO AJP-4, AJP-4.4  
-- JP 4-0: *Joint Logistics*  
-- Tatham & Houghton, *Humanitarian Logistics*  
-- Wolf et al., *DistilBERT (Transformers)*
+## How to Reproduce
+- Open `code/code.ipynb`
+- Run cells in order: preprocessing → severity mapping → model training → evaluation
 
 ---
 
-## 📫 Contact
-**Donghyun Kim**  
-Department of Statistics  
-University of Michigan  
-📧 donghki@umich.edu  
-
----
+## Repository Structure
+```text
+├── Figure/                         # Figures for EDA and results
+├── code/                           # Full, annotated notebook pipeline
+├── report/                         # Full project report
+└── README.md
