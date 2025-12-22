@@ -172,7 +172,7 @@ and **Critical recall decreases**, increasing high-impact errors under the opera
 ### Confusion Matrix Comparison (Test Set)
 | DistilBERT (Baseline) | Domain-Adapted DistilBERT |
 |---|---|
-| ![](Figure/confusion_matrix_distilbert_baseline.jpg) | ![](Figure/confusion_matrix_domain_adapt.jpg) |
+| ![](figures/confusion_matrix_distilbert_baseline.jpg) | ![](figures/confusion_matrix_domain_adapt.jpg) |
 
 Confusion matrices reveal systematic confusion between adjacent severity levels (especially Routine–Elevated and Elevated–Urgent).
 While lexicon-guided oversampling alters prediction patterns, it does not consistently reduce high-risk errors involving Urgent/Critical cases.
