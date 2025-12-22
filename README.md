@@ -15,9 +15,8 @@ Key components:
 - **Cost-sensitive evaluation** (risk matrix)
 
 ## Report & Code
-- **Final report (PDF):** `Project_507_Donghyun Kim.pdf`
+- **report:** `Project_507_Donghyun Kim.pdf`
 - **Notebook:** `Final_Project_Donghyun Kim.ipynb`
-- **Scripts:** `scripts/` (training/evaluation utilities)
 - **Figures:** `Figure/`
 
 ---
@@ -111,6 +110,14 @@ Lexicon-guided oversampling **shifts model behavior** but **does not improve ove
 Notable behavior changes observed in the analysis include increased sensitivity to logistics-related cues and reduced performance
 for rare high-severity cases.
 
+### Confusion Matrix Comparison (Test Set)
+
+| TF–IDF + Logistic Regression | DistilBERT | Domain-Adapted DistilBERT |
+|---|---|---|
+| ![](Figure/confusion_matrix_logistic_baseline.jpg) | ![](Figure/confusion_matrix_distilbert_baseline.jpg) | ![](Figure/confusion_matrix_domain_adapt.jpg) |
+
+Confusion matrices highlight systematic confusion between adjacent severity levels,
+motivating the use of cost-sensitive evaluation beyond accuracy.
 ---
 
 ## Conclusion
