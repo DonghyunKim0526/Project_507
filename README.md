@@ -117,26 +117,23 @@ This preserves architecture and label space while changing only the sampling dis
 ---
 
 ### 4) Cost-Sensitive Evaluation (Risk Matrix)
-In operational settings, misclassifying a **Critical** event as **Routine** can be far worse than minor false alarms.
-To encode this, the project defines a **4×4 cost matrix** \(C\) (rows = true label, columns = predicted label):
+In operational settings, misclassifying a Critical event as Routine can be far worse than minor false alarms.
+To encode this asymmetry, a 4×4 cost matrix C is defined (rows = true label, columns = predicted label):
 
-\[
-C=
-\begin{bmatrix}
-0 & 1 & 3 & 4 \\
-1 & 0 & 2 & 4 \\
-3 & 2 & 0 & 2.5 \\
-5 & 4 & 2.5 & 0
-\end{bmatrix}
-\]
+| True \ Pred | Routine | Elevated | Urgent | Critical |
+|---|---:|---:|---:|---:|
+| **Routine**  | 0   | 1   | 3   | 4   |
+| **Elevated** | 1   | 0   | 2   | 4   |
+| **Urgent**   | 3   | 2   | 0   | 2.5 |
+| **Critical** | 5   | 4   | 2.5 | 0   |
 
-- Highest penalties: **underestimating Urgent/Critical** (e.g., Critical → Routine)
-- Lower but non-zero penalties: false alarms and mid-level confusions
+- Highest penalties correspond to **underestimating Urgent or Critical events**
+  (e.g., Critical → Routine).
+- Lower but non-zero penalties capture false alarms and mid-level confusions.
 
-Given confusion matrix counts \(n_{ij}\), the total and average risk are computed as:
-\[
-R_{\text{total}}=\sum_{i,j} n_{ij}C_{ij}, \quad R_{\text{avg}}=R_{\text{total}}/N
-\]
+Given confusion matrix counts n_ij:
+- **Total risk:** `R_total = Σ_ij (n_ij × C_ij)`
+- **Average risk:** `R_avg = R_total / N`
 
 Reported metrics include:
 - Accuracy, Macro-F1, per-class precision/recall
