@@ -1,5 +1,5 @@
 # Crisis Severity Detection with TF–IDF Logistic Regression and DistilBERT
-*A cost-sensitive approach with an operational 4-level severity scale and lightweight lexicon-guided adaptation*
+**A cost-sensitive approach with an operational 4-level severity scale and lightweight lexicon-guided adaptation**
 
 ## Overview
 This project builds an end-to-end pipeline for **crisis severity detection** from short, noisy social-media text
