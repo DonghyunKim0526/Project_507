@@ -14,11 +14,6 @@ Key components:
 - **Lexicon-guided oversampling** for lightweight domain adaptation
 - **Cost-sensitive evaluation** (risk matrix)
 
-## Report & Code
-- **report:** `Project_507_Donghyun Kim.pdf`
-- **Notebook:** `Final_Project_Donghyun Kim.ipynb`
-- **Figures:** `Figure/`
-
 ---
 
 ## Problem Statement
