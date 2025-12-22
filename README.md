@@ -5,7 +5,6 @@
 ## Report
 - 📄 [Crisis Severity Detection Project Report (PDF)](Project_507_Donghyun_Kim.pdf)
 
-<<<<<<< HEAD
 ## Colab Notebook (code script)
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
